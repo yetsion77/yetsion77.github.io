@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סדר את המקומות מצפון לדרום</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #places {
+            list-style-type: none;
+            padding: 0;
+        }
+        .place {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #000;
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+    <h1>סדר את המקומות מצפון לדרום</h1>
+    <ul id="places">
+        <li class="place">ירושלים</li>
+        <li class="place">אילת</li>
+        <li class="place">תל אביב</li>
+        <li class="place">חיפה</li>
+        <li class="place">באר שבע</li>
+        <li class="place">צפת</li>
+        <li class="place">נתניה</li>
+        <li class="place">טבריה</li>
+        <li class="place">אשדוד</li>
+        <li class="place">עכו</li>
+    </ul>
+    <button onclick="checkOrder()">בדוק סדר</button>
+    <p id="result"></p>
+
+    <script>
+        let draggingElement;
+
+        document.querySelectorAll('.place').forEach(place => {
+            place.draggable = true;
+
+            place.addEventListener('dragstart', (e) => {
+                draggingElement = e.target;
+            });
+
+            place.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+
+            place.addEventListener('drop', (e) => {
+                e.preventDefault();
+                if (e.target.classList.contains('place')) {
+                    const list = draggingElement.parentNode;
+                    list.insertBefore(draggingElement, e.target.nextSibling);
+                }
+            });
+        });
+
+        function checkOrder() {
+            const correctOrder = ["צפת", "עכו", "חיפה", "טבריה", "נתניה", "תל אביב", "אשדוד", "ירושלים", "באר שבע", "אילת"];
+            const places = document.querySelectorAll('.place');
+            const userOrder = Array.from(places).map(place => place.textContent);
+
+            const isCorrect = userOrder.every((place, index) => place === correctOrder[index]);
+
+            const result = document.getElementById('result');
+            if (isCorrect) {
+                result.textContent = "כל הכבוד! הסדר נכון.";
+            } else {
+                result.textContent = "נסה שוב, הסדר לא נכון.";
+            }
+        }
+    </script>
+</body>
+</html>
